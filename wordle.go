@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 var wordList = []string{
 	"FETCH",
@@ -9,18 +12,20 @@ var wordList = []string{
 	"LUNGS",
 	"TWIST",
 }
-var result = map[int]string {
+var gameResults map[int]string
 
-	1: "[ ][ ][ ][ ][ ]",
-	2: "[ ][ ][ ][ ][ ]",
-	3: "[ ][ ][ ][ ][ ]",
-	4: "[ ][ ][ ][ ][ ]",
-	5: "[ ][ ][ ][ ][ ]",
-	6: "[ ][ ][ ][ ][ ]",
+var Turns int
+
+func init(){
+	gameResults = make(map[int]string)
+	for i := 0 ; i < Turns; i++ {
+		gameResults [i] =  "[ ][ ][ ][ ][ ]"
+	}
 }
 
 func main(){
 	var GameMode int
+	Turns = 6
 	printIntro()
 	for true{
 		printGameMode()
@@ -49,8 +54,10 @@ func printGameMode(){
 }
 
 func playGame() {
-	for _, x := range result{
-		fmt.Println(x)
+	wordAnswer := wordList[rand.Intn(len(wordList))]
+	var gameTurns int = len(wordList)
+	for x := 0; x < gameTurns; x++{
+		fmt.Println(gameResults[x])
 	}
-	fmt.Println(result)
+	fmt.Println(wordAnswer)
 }
