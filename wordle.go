@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
+	// "math/rand"
 )
 
 var wordList = []string{
@@ -13,6 +13,7 @@ var wordList = []string{
 	"TWIST",
 }
 var gameResults map[int]string
+var streak int = 0
 
 var Turns int
 
@@ -26,9 +27,8 @@ func init(){
 func main(){
 	var GameMode int
 	Turns = 6
-	printIntro()
 	for true{
-		printGameMode()
+		printIntro()
 		fmt.Scan(&GameMode)
 		if GameMode == 1{
 			//play game
@@ -39,25 +39,31 @@ func main(){
 			//error or exit
 			break
 		}
+		fmt.Println("")
 	}
 }
 
 func printIntro(){
 	//game_loop
+	fmt.Println("")
 	fmt.Println("WORDLE_GO")
-	fmt.Println("Enter options below:")
+	fmt.Println("")
+	fmt.Println("Select #:")
+	fmt.Println("1 - Play Wordle")
+	fmt.Println("2 - Streaks")
+	fmt.Println("0 - Exit")
+	fmt.Print("> ")
 }
 
 func printGameMode(){
-	fmt.Println("1 - Play Wordle")
-	fmt.Println("2 - Streaks")
+	
 }
 
 func playGame() {
-	wordAnswer := wordList[rand.Intn(len(wordList))]
-	var gameTurns int = len(wordList)
-	for x := 0; x < gameTurns; x++{
-		fmt.Println(gameResults[x])
-	}
-	fmt.Println(wordAnswer)
+	// wordAnswer := wordList[rand.Intn(len(wordList))]
+	// var gameTurns int = len(wordList)
+	// for x := 0; x < gameTurns; x++{
+	// 	fmt.Println(gameResults[x])
+	// }
+	// fmt.Println(wordAnswer)
 }
