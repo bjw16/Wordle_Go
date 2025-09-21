@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 var wordList = []string{
@@ -14,14 +15,13 @@ var wordList = []string{
 	"LUNGS",
 	"TWIST",
 }
-
 var possibleLetters []string
+var gameResults [Turns][letterCount]string
 
 
 // var streak int = 0
 const Turns int = 6
 const letterCount int = 5
-var gameResults [Turns][letterCount]string
 
 func setArrays() {
 	for i := range gameResults {
@@ -30,9 +30,9 @@ func setArrays() {
 		}
 	}
 	possibleLetters = []string{
-		"Q W E R T Y U I O P",
-		"A S D F G H J K O L",
-		"   Z X C V B N M",
+		"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
+		"A", "S", "D", "F", "G", "H", "J", "K" ,"O", "L", 
+		          "Z", "X", "C", "V", "B", "N", "M", 
 	}
 }
 
@@ -196,12 +196,46 @@ func printWinLose(win bool){
 }
 
 func printPossibleLetters(){
-
 	//check each letter to see if it is in the game results
 	//color code chosen letters based on if they are in the right place or contained
 	//in the word
-	for _,x := range possibleLetters{
-		fmt.Println(x)
+	for i,x := range possibleLetters{
+		if unicode.IsLower(rune(x[0])) == true {
+			fmt.Print(strings.ToUpper(x) + " ")
+
+		} else {
+			fmt.Print("\033[37m" + x + "\033[0m" + " ")
+		}
+
+		if i == 9 {
+			fmt.Println("")
+		} else if i == 19 {
+			fmt.Println("")
+			fmt.Print("  ")
+		}
 	}
-	
+	fmt.Println("")
+}
+
+//Essentially, if letter is chosen, we will make it lowercase
+//this will help with printing
+func makePossibleLettersChoosen(answer string, userChoice string){
+	for _, x := range userChoice {
+		if strings.Contains(string(x), answer){
+			possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToLower(string(x))
+		}
+	}
+}
+
+
+//make sure letter is upper case when sent as parameter
+func findLetterPosition(letter string) int{
+	var index int
+	for i, x := range possibleLetters {
+		if x == letter {
+			index = i
+			break
+		}
+	}
+	return index
 }
