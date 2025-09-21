@@ -160,7 +160,7 @@ func printTurn(currTurn int, guess string, answer string) {
 				}
 				if string(answer[i]) == string(y) {
 					//ANSI for green background, and resets format
-					fmt.Print("\033[0m" +  string(y) + "\033[0m")
+					fmt.Print("\033[32m" +  string(y) + "\033[0m")
 					
 				} else if strings.Contains(answer, string(y)) {
 					//ANSI for yellow background, and resets format
