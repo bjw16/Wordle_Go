@@ -23,18 +23,16 @@ const Turns int = 6
 const letterCount int = 5
 var gameResults [Turns][letterCount]string
 
-func setArray() {
+func setArrays() {
 	for i := range gameResults {
 		for j := range gameResults[i]{
 			gameResults[i][j] = "_"
 		}
 	}
 	possibleLetters = []string{
-		"A", "B", "C",
-		"D", "E", "F", "G", "H", "I",
-		"J", "K", "L", "M", "N", "O",
-		"P", "Q", "R", "X", "T", "U",
-		"V", "W", "X", "Y", "Z",
+		"Q W E R T Y U I O P",
+		"A S D F G H J K O L",
+		"   Z X C V B N M",
 	}
 }
 
@@ -51,7 +49,7 @@ func main() {
 		}
 		if GameMode == 1 || playAgain == true{
 			//play game
-			setArray() 
+			setArrays() 
 			results = playGame()
 
 			//play again
@@ -101,6 +99,7 @@ func playGame() bool{
 	for x := 0; x < Turns; x++ {
 		//var playAgain int
 		printTurn(x + 1, guess, wordAnswer)
+		printPossibleLetters()
 		//resets guess
 		guess = ""
 
@@ -115,6 +114,7 @@ func playGame() bool{
 					fmt.Println("Guess to big, try again!")
 				}
 				printTurn(x, guess, wordAnswer)
+				printPossibleLetters()
 				guess = ""
 			} else {
 				break
@@ -158,15 +158,17 @@ func printTurn(currTurn int, guess string, answer string) {
 				if i == 0 {
 					fmt.Print("[")
 				}
-				if string(answer[i]) == string(y) {
+
+				//https://www.dolthub.com/blog/2024-02-23-colors-in-golang/
+				if string(answer[i]) == strings.ToUpper(string(y)) {
 					//ANSI for green background, and resets format
-					fmt.Print("\033[32m" +  string(y) + "\033[0m")
+					fmt.Print("\033[32m" +  strings.ToUpper(string(y)) + "\033[0m")
 					
-				} else if strings.Contains(answer, string(y)) {
+				} else if strings.Contains(answer, strings.ToUpper(string(y))) {
 					//ANSI for yellow background, and resets format
-					fmt.Print("\033[43m" +  string(y) + "\033[0m")
+					fmt.Print("\033[43m" +  strings.ToUpper(string(y)) + "\033[0m")
 				} else {
-					fmt.Print(string(y))
+					fmt.Print(strings.ToUpper(string(y)))
 				}
 
 				if i != len(x) - 1{
@@ -183,8 +185,6 @@ func printTurn(currTurn int, guess string, answer string) {
 			fmt.Println(x)
 		}
 	}
-
-
 }
 
 func printWinLose(win bool){
@@ -193,4 +193,15 @@ func printWinLose(win bool){
 	} else {
 		fmt.Println("You loose! Play again? (1 - Yes, 0 - No)")
 	}
+}
+
+func printPossibleLetters(){
+
+	//check each letter to see if it is in the game results
+	//color code chosen letters based on if they are in the right place or contained
+	//in the word
+	for _,x := range possibleLetters{
+		fmt.Println(x)
+	}
+	
 }
