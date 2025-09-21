@@ -15,6 +15,9 @@ var wordList = []string{
 	"TWIST",
 }
 
+var possibleLetters []string
+
+
 // var streak int = 0
 const Turns int = 6
 const letterCount int = 5
@@ -25,6 +28,13 @@ func init() {
 		for j := range gameResults[i]{
 			gameResults[i][j] = "_"
 		}
+	}
+	possibleLetters = []string{
+		"A", "B", "C",
+		"D", "E", "F", "G", "H", "I",
+		"J", "K", "L", "M", "N", "O",
+		"P", "Q", "R", "X", "T", "U",
+		"V", "W", "X", "Y", "Z",
 	}
 }
 
@@ -63,16 +73,24 @@ func printIntro() {
 func playGame() {
 	//randomizes word
 	wordAnswer := wordList[rand.Intn(len(wordList))]
-	//sets how many turns the player should play. Default 6.
-	var gameTurns int = len(wordList)
+
 
 	//print turn
-	for x := 0; x < gameTurns; x++ {
+	for x := 0; x <= Turns; x++ {
 		var guess string
 		printTurn(x + 1)
+
+		//player guess response
 		fmt.Print("> ")
 		fmt.Scan(&guess)
 		fmt.Println("")
+
+		//need error check if less than 5 letters
+		for y := 0; y < letterCount; y++{
+			gameResults[x][y] = string(guess[y])
+		}
+
+		//winner
 		if guess == wordAnswer {
 			break
 		}
