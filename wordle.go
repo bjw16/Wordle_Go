@@ -16,22 +16,21 @@ var wordList = []string{
 }
 
 // var streak int = 0
-var Turns int
-var letterCount int
-var gameResults [][]string
+const Turns int = 6
+const letterCount int = 5
+var gameResults [Turns][letterCount]string
 
 func init() {
-	Turns = 6
-	letterCount = 5
-	gameResults := make([][]string, Turns, 100)
 	for i := range gameResults {
-		gameResults[i] = append(gameResults[i], "     ")
+		for j := range gameResults[i]{
+			gameResults[i][j] = "_"
+		}
 	}
 }
 
 func main() {
 	var GameMode int
-	Turns = 6
+
 	for true {
 		printIntro()
 		fmt.Scan(&GameMode)
@@ -70,7 +69,7 @@ func playGame() {
 	//print turn
 	for x := 0; x < gameTurns; x++ {
 		var guess string
-		printTurn(x)
+		printTurn(x + 1)
 		fmt.Print("> ")
 		fmt.Scan(&guess)
 		fmt.Println("")
@@ -83,14 +82,8 @@ func playGame() {
 
 // print results for all turns so far
 func printTurn(currTurn int) {
-	fmt.Println("Turn: " + strconv.Itoa(currTurn+1))
-	fmt.Println(gameResults[1])
-	// for i := 0; i < Turns; i++ {
-	// 	fmt.Println(gameResults[i])
-	// 	// for v2 := range gameResults[v1] {
-	// 	// 	fmt.Print("[")
-	// 	// 	fmt.Print(v2)
-	// 	// 	fmt.Print("]")
-	// 	// }
-	// }
+	fmt.Println("Turn: " + strconv.Itoa(currTurn))
+	for _,x := range gameResults{
+		fmt.Println(x)
+	}
 }
