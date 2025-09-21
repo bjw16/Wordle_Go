@@ -23,7 +23,7 @@ const Turns int = 6
 const letterCount int = 5
 var gameResults [Turns][letterCount]string
 
-func init() {
+func setArray() {
 	for i := range gameResults {
 		for j := range gameResults[i]{
 			gameResults[i][j] = "_"
@@ -40,13 +40,32 @@ func init() {
 
 func main() {
 	var GameMode int
+	var playAgain bool = false
 
 	for true {
-		printIntro()
-		fmt.Scan(&GameMode)
-		if GameMode == 1 {
+		var results bool
+		var playAgainResponse int
+		if playAgain != true{
+			printIntro()
+			fmt.Scan(&GameMode)
+		}
+		if GameMode == 1 || playAgain == true{
 			//play game
-			playGame()
+			setArray() 
+			results = playGame()
+
+			//play again
+			printWinLose(results)
+			fmt.Print("> ")
+			fmt.Scan(&playAgainResponse)
+			if playAgainResponse == 1 {
+				//play again
+				playAgain = true
+				continue
+			} else if playAgainResponse == 0 {
+				playAgain = false
+				continue
+			}
 		} else if GameMode == 2 {
 			//show stats
 			fmt.Println(gameResults[0])
@@ -70,38 +89,97 @@ func printIntro() {
 	fmt.Print("> ")
 }
 
-func playGame() {
+func playGame() bool{
 	//randomizes word
 	wordAnswer := wordList[rand.Intn(len(wordList))]
+	var winOrLose bool
+	var guess string = ""
 
 
 	//print turn
-	for x := 0; x <= Turns; x++ {
-		var guess string
-		printTurn(x + 1)
+	for x := 0; x < Turns; x++ {
+		//var playAgain int
+		printTurn(x + 1, guess)
+		//resets guess
+		guess = ""
 
 		//player guess response
-		fmt.Print("> ")
-		fmt.Scan(&guess)
-		fmt.Println("")
+		for {
+			fmt.Print("> ")
+			fmt.Scan(&guess)
+			if len(guess) < letterCount || len(guess) > letterCount{
+				if len(guess) < letterCount {
+					fmt.Println("Guess to small, try again!")
+				} else {
+					fmt.Println("Guess to big, try again!")
+				}
+				printTurn(x, guess)
+				guess = ""
+			} else {
+				break
 
+			} 
+		}
+		fmt.Println("")
 		//need error check if less than 5 letters
+
+		//stores guess into results
 		for y := 0; y < letterCount; y++{
 			gameResults[x][y] = string(guess[y])
 		}
 
-		//winner
-		if guess == wordAnswer {
+		//Determines if guess matches selected word
+		if guess == wordAnswer{
+			winOrLose = true
+			printTurn(x + 1, guess)
 			break
+			// //play again
+			// printWinLose(true)
+			// fmt.Print("> ")
+			// fmt.Scan(&playAgain)
+			// if playAgain == 1 {
+			// 	//play again
+			// 	setArray() 
+			// 	playGame()
+			// } else if playAgain == 0 {
+			// 	break
+			// }
+		} else if x == Turns - 1{
+			winOrLose = false
+			printTurn(x + 1, guess)
+			break
+			// printWinLose(false)
+			// fmt.Print("> ")
+			// fmt.Scan(&playAgain)
+			// if playAgain == 1 {
+			// 	//play again
+			// 	setArray() 
+			// 	playGame()
+			// } else if playAgain == 0 {
+			// 	break
+			// }
+		} else {
+			continue
 		}
 	}
-
+	return winOrLose
 }
 
 // print results for all turns so far
-func printTurn(currTurn int) {
+func printTurn(currTurn int, guess string) {
 	fmt.Println("Turn: " + strconv.Itoa(currTurn))
+	if guess != "" {
+		fmt.Println("Guess: " + guess)
+	}
 	for _,x := range gameResults{
 		fmt.Println(x)
+	}
+}
+
+func printWinLose(win bool){
+	if win == true{
+		fmt.Println("You win! Play again? (1 - Yes, 2 - No)")
+	} else {
+		fmt.Println("You loose! Play again? (1 - Yes, 0 - No)")
 	}
 }
