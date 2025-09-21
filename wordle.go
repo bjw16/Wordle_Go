@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	// "math/rand"
+	"strings"
 )
 
 var wordList = []string{
@@ -89,6 +89,7 @@ func printIntro() {
 	fmt.Print("> ")
 }
 
+//function to play full game - module
 func playGame() bool{
 	//randomizes word
 	wordAnswer := wordList[rand.Intn(len(wordList))]
@@ -99,7 +100,7 @@ func playGame() bool{
 	//print turn
 	for x := 0; x < Turns; x++ {
 		//var playAgain int
-		printTurn(x + 1, guess)
+		printTurn(x + 1, guess, wordAnswer)
 		//resets guess
 		guess = ""
 
@@ -113,7 +114,7 @@ func playGame() bool{
 				} else {
 					fmt.Println("Guess to big, try again!")
 				}
-				printTurn(x, guess)
+				printTurn(x, guess, wordAnswer)
 				guess = ""
 			} else {
 				break
@@ -131,33 +132,12 @@ func playGame() bool{
 		//Determines if guess matches selected word
 		if guess == wordAnswer{
 			winOrLose = true
-			printTurn(x + 1, guess)
+			printTurn(x + 1, guess, wordAnswer)
 			break
-			// //play again
-			// printWinLose(true)
-			// fmt.Print("> ")
-			// fmt.Scan(&playAgain)
-			// if playAgain == 1 {
-			// 	//play again
-			// 	setArray() 
-			// 	playGame()
-			// } else if playAgain == 0 {
-			// 	break
-			// }
 		} else if x == Turns - 1{
 			winOrLose = false
-			printTurn(x + 1, guess)
+			printTurn(x + 1, guess, wordAnswer)
 			break
-			// printWinLose(false)
-			// fmt.Print("> ")
-			// fmt.Scan(&playAgain)
-			// if playAgain == 1 {
-			// 	//play again
-			// 	setArray() 
-			// 	playGame()
-			// } else if playAgain == 0 {
-			// 	break
-			// }
 		} else {
 			continue
 		}
@@ -166,14 +146,45 @@ func playGame() bool{
 }
 
 // print results for all turns so far
-func printTurn(currTurn int, guess string) {
+func printTurn(currTurn int, guess string, answer string) {
 	fmt.Println("Turn: " + strconv.Itoa(currTurn))
 	if guess != "" {
 		fmt.Println("Guess: " + guess)
+		fmt.Println(answer)
+		for _,x := range gameResults{
+			//determines what letters match and do not match
+			for i, y := range x{
+				//checks if letters match
+				if i == 0 {
+					fmt.Print("[")
+				}
+				if string(answer[i]) == string(y) {
+					//ANSI for green background, and resets format
+					fmt.Print("\033[0m" +  string(y) + "\033[0m")
+					
+				} else if strings.Contains(answer, string(y)) {
+					//ANSI for yellow background, and resets format
+					fmt.Print("\033[43m" +  string(y) + "\033[0m")
+				} else {
+					fmt.Print(string(y))
+				}
+
+				if i != len(x) - 1{
+					fmt.Print(" ")
+				} 
+				
+			}
+			fmt.Print("]")
+			fmt.Println("")
+
+		}
+	} else {
+		for _,x := range gameResults{
+			fmt.Println(x)
+		}
 	}
-	for _,x := range gameResults{
-		fmt.Println(x)
-	}
+
+
 }
 
 func printWinLose(win bool){
