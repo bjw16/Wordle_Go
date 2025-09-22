@@ -203,7 +203,13 @@ func printPossibleLetters(){
 	//in the word
 	for i,x := range possibleLetters{
 		if unicode.IsLower(rune(x[0])) == true {
-			fmt.Print(strings.ToUpper(x) + " ")
+			fmt.Print(strings.ToUpper(string(x[0])) + " ")
+		} else if len(x) == 2{
+			if string(x[1]) == "-" {
+				fmt.Print("\033[33m"+ string(x[0]) + " " + "\033[0m" )
+			} else {
+				fmt.Print("\033[32m" + string(x[0]) + " " + "\033[0m" )
+			}
 		} else {
 			fmt.Print("\033[47m" + x + " " + "\033[0m" )
 		}
@@ -221,12 +227,24 @@ func printPossibleLetters(){
 //Essentially, if letter is chosen, we will make it lowercase
 //this will help with printing
 func makePossibleLettersChoosen(answer string, userChoice string){
-	for _, x := range userChoice {
+	for n, x := range userChoice {
+		var green bool = false
 		//this is lower casing if letters were contained in word
-		// if strings.Contains(answer,string(x)){
-		// 	possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToLower(string(x))
-		// }
-		possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToLower(string(x))
+		if strings.Contains(answer,string(x)){
+			for i, y := range answer {
+				if y == x && i == n {
+					green = true
+					break
+				}
+			}
+			if green == true {
+				possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToUpper(string(x)) + "+"
+			} else {
+				possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToUpper(string(x)) + "-"
+			}
+		} else {
+			possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToLower(string(x))
+		}
 	}
 }
 
