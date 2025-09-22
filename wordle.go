@@ -205,7 +205,7 @@ func printPossibleLetters(){
 		if unicode.IsLower(rune(x[0])) == true {
 			fmt.Print(strings.ToUpper(x) + " ")
 		} else {
-			fmt.Print("\033[47m" + x + "\033[0m" + " ")
+			fmt.Print("\033[47m" + x + " " + "\033[0m" )
 		}
 
 		if i == 9 {
