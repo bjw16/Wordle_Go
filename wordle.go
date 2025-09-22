@@ -105,6 +105,7 @@ func playGame() bool{
 
 		//player guess response
 		for {
+			fmt.Println("")
 			fmt.Print("> ")
 			fmt.Scan(&guess)
 			if len(guess) < letterCount || len(guess) > letterCount{
@@ -139,6 +140,7 @@ func playGame() bool{
 			printTurn(x + 1, guess, wordAnswer)
 			break
 		} else {
+			makePossibleLettersChoosen(wordAnswer, guess)
 			continue
 		}
 	}
@@ -202,9 +204,8 @@ func printPossibleLetters(){
 	for i,x := range possibleLetters{
 		if unicode.IsLower(rune(x[0])) == true {
 			fmt.Print(strings.ToUpper(x) + " ")
-
 		} else {
-			fmt.Print("\033[37m" + x + "\033[0m" + " ")
+			fmt.Print("\033[47m" + x + "\033[0m" + " ")
 		}
 
 		if i == 9 {
@@ -221,7 +222,7 @@ func printPossibleLetters(){
 //this will help with printing
 func makePossibleLettersChoosen(answer string, userChoice string){
 	for _, x := range userChoice {
-		if strings.Contains(string(x), answer){
+		if strings.Contains(answer,string(x)){
 			possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToLower(string(x))
 		}
 	}
