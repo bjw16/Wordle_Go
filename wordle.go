@@ -22,6 +22,7 @@ var gameResults [Turns][letterCount]string
 // var streak int = 0
 const Turns int = 6
 const letterCount int = 5
+var streaks int = 0
 
 func setArrays() {
 	for i := range gameResults {
@@ -48,6 +49,8 @@ func main() {
 			fmt.Scan(&GameMode)
 		}
 		if GameMode == 1 || playAgain == true{
+			//possibly needed to reset play again
+			playAgain = false
 			//play game
 			setArrays() 
 			results = playGame()
@@ -66,7 +69,7 @@ func main() {
 			}
 		} else if GameMode == 2 {
 			//show stats
-			fmt.Println(gameResults[0])
+			fmt.Println("Streak: "+ string(streaks))
 		} else if GameMode == 0 {
 			//error or exit
 			break
@@ -192,8 +195,10 @@ func printTurn(currTurn int, guess string, answer string) {
 func printWinLose(win bool){
 	if win == true{
 		fmt.Println("You win! Play again? (1 - Yes, 2 - No)")
+		streaks += streaks + 1
 	} else {
 		fmt.Println("You loose! Play again? (1 - Yes, 0 - No)")
+		streaks = 0
 	}
 }
 
