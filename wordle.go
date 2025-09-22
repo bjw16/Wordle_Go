@@ -222,9 +222,11 @@ func printPossibleLetters(){
 //this will help with printing
 func makePossibleLettersChoosen(answer string, userChoice string){
 	for _, x := range userChoice {
-		if strings.Contains(answer,string(x)){
-			possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToLower(string(x))
-		}
+		//this is lower casing if letters were contained in word
+		// if strings.Contains(answer,string(x)){
+		// 	possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToLower(string(x))
+		// }
+		possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToLower(string(x))
 	}
 }
 
@@ -233,6 +235,7 @@ func makePossibleLettersChoosen(answer string, userChoice string){
 func findLetterPosition(letter string) int{
 	var index int
 	for i, x := range possibleLetters {
+		//fmt.Println(x)
 		if x == letter {
 			index = i
 			break
