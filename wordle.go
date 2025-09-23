@@ -19,7 +19,6 @@ var wordList = []string{
 var possibleLetters []string
 var gameResults [Turns][letterCount]string
 
-
 // var streak int = 0
 const Turns int = 6
 const letterCount int = 5
@@ -27,14 +26,14 @@ var streaks int = 0
 
 func setArrays() {
 	for i := range gameResults {
-		for j := range gameResults[i]{
+		for j := range gameResults[i] {
 			gameResults[i][j] = "_"
 		}
 	}
 	possibleLetters = []string{
 		"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
-		"A", "S", "D", "F", "G", "H", "J", "K" ,"O", "L", 
-		          "Z", "X", "C", "V", "B", "N", "M", 
+		"A", "S", "D", "F", "G", "H", "J", "K", "O", "L",
+		"Z", "X", "C", "V", "B", "N", "M",
 	}
 }
 
@@ -45,15 +44,13 @@ func main() {
 	for true {
 		var results bool
 		var playAgainResponse int
-		if playAgain != true{
+		if playAgain != true {
 			printIntro()
 			fmt.Scan(&GameMode)
 		}
 		if GameMode == 1 || playAgain == true{
-			//possibly needed to reset play again
-			playAgain = false
 			//play game
-			setArrays() 
+			setArrays()
 			results = playGame()
 
 			//play again
@@ -93,18 +90,17 @@ func printIntro() {
 	fmt.Print("> ")
 }
 
-//function to play full game - module
-func playGame() bool{
+// function to play full game - module
+func playGame() bool {
 	//randomizes word
 	wordAnswer := wordList[rand.Intn(len(wordList))]
 	var winOrLose bool
 	var guess string = ""
 
-
 	//print turn
 	for x := 0; x < Turns; x++ {
 		//var playAgain int
-		printTurn(x + 1, guess, wordAnswer)
+		printTurn(x+1, guess, wordAnswer)
 		printPossibleLetters()
 		//resets guess
 		guess = ""
@@ -114,7 +110,7 @@ func playGame() bool{
 			fmt.Println("")
 			fmt.Print("> ")
 			fmt.Scan(&guess)
-			if len(guess) < letterCount || len(guess) > letterCount{
+			if len(guess) < letterCount || len(guess) > letterCount {
 				if len(guess) < letterCount {
 					fmt.Println("Guess to small, try again!")
 				} else {
@@ -126,24 +122,24 @@ func playGame() bool{
 			} else {
 				break
 
-			} 
+			}
 		}
 		fmt.Println("")
 		//need error check if less than 5 letters
 
 		//stores guess into results
-		for y := 0; y < letterCount; y++{
+		for y := 0; y < letterCount; y++ {
 			gameResults[x][y] = string(guess[y])
 		}
 
 		//Determines if guess matches selected word
-		if guess == wordAnswer{
+		if guess == wordAnswer {
 			winOrLose = true
-			printTurn(x + 1, guess, wordAnswer)
+			printTurn(x+1, guess, wordAnswer)
 			break
-		} else if x == Turns - 1{
+		} else if x == Turns-1 {
 			winOrLose = false
-			printTurn(x + 1, guess, wordAnswer)
+			printTurn(x+1, guess, wordAnswer)
 			break
 		} else {
 			makePossibleLettersChoosen(wordAnswer, guess)
@@ -158,10 +154,9 @@ func printTurn(currTurn int, guess string, answer string) {
 	fmt.Println("Turn: " + strconv.Itoa(currTurn))
 	if guess != "" {
 		fmt.Println("Guess: " + guess)
-		fmt.Println(answer)
-		for _,x := range gameResults{
+		for _, x := range gameResults {
 			//determines what letters match and do not match
-			for i, y := range x{
+			for i, y := range x {
 				//checks if letters match
 				if i == 0 {
 					fmt.Print("[")
@@ -170,33 +165,33 @@ func printTurn(currTurn int, guess string, answer string) {
 				//https://www.dolthub.com/blog/2024-02-23-colors-in-golang/
 				if string(answer[i]) == strings.ToUpper(string(y)) {
 					//ANSI for green background, and resets format
-					fmt.Print("\033[32m" +  strings.ToUpper(string(y)) + "\033[0m")
-					
+					fmt.Print("\033[32m" + strings.ToUpper(string(y)) + "\033[0m")
+
 				} else if strings.Contains(answer, strings.ToUpper(string(y))) {
 					//ANSI for yellow background, and resets format
-					fmt.Print("\033[43m" +  strings.ToUpper(string(y)) + "\033[0m")
+					fmt.Print("\033[43m" + strings.ToUpper(string(y)) + "\033[0m")
 				} else {
 					fmt.Print(strings.ToUpper(string(y)))
 				}
 
-				if i != len(x) - 1{
+				if i != len(x)-1 {
 					fmt.Print(" ")
-				} 
-				
+				}
+
 			}
 			fmt.Print("]")
 			fmt.Println("")
 
 		}
 	} else {
-		for _,x := range gameResults{
+		for _, x := range gameResults {
 			fmt.Println(x)
 		}
 	}
 }
 
-func printWinLose(win bool){
-	if win == true{
+func printWinLose(win bool) {
+	if win == true {
 		fmt.Println("You win! Play again? (1 - Yes, 2 - No)")
 		streaks += streaks + 1
 	} else {
@@ -205,21 +200,21 @@ func printWinLose(win bool){
 	}
 }
 
-func printPossibleLetters(){
+func printPossibleLetters() {
 	//check each letter to see if it is in the game results
 	//color code chosen letters based on if they are in the right place or contained
 	//in the word
-	for i,x := range possibleLetters{
+	for i, x := range possibleLetters {
 		if unicode.IsLower(rune(x[0])) == true {
 			fmt.Print(strings.ToUpper(string(x[0])) + " ")
-		} else if len(x) == 2{
+		} else if len(x) == 2 {
 			if string(x[1]) == "-" {
-				fmt.Print("\033[33m"+ string(x[0]) + " " + "\033[0m" )
+				fmt.Print("\033[33m" + string(x[0]) + " " + "\033[0m")
 			} else {
-				fmt.Print("\033[32m" + string(x[0]) + " " + "\033[0m" )
+				fmt.Print("\033[32m" + string(x[0]) + " " + "\033[0m")
 			}
 		} else {
-			fmt.Print("\033[47m" + x + " " + "\033[0m" )
+			fmt.Print("\033[47m" + x + " " + "\033[0m")
 		}
 
 		if i == 9 {
@@ -232,13 +227,13 @@ func printPossibleLetters(){
 	fmt.Println("")
 }
 
-//Essentially, if letter is chosen, we will make it lowercase
-//this will help with printing
-func makePossibleLettersChoosen(answer string, userChoice string){
+// Essentially, if letter is chosen, we will make it lowercase
+// this will help with printing
+func makePossibleLettersChoosen(answer string, userChoice string) {
 	for n, x := range userChoice {
 		var green bool = false
 		//this is lower casing if letters were contained in word
-		if strings.Contains(answer,string(x)){
+		if strings.Contains(answer, string(x)) {
 			for i, y := range answer {
 				if y == x && i == n {
 					green = true
@@ -256,9 +251,8 @@ func makePossibleLettersChoosen(answer string, userChoice string){
 	}
 }
 
-
-//make sure letter is upper case when sent as parameter
-func findLetterPosition(letter string) int{
+// make sure letter is upper case when sent as parameter
+func findLetterPosition(letter string) int {
 	var index int
 	for i, x := range possibleLetters {
 		//fmt.Println(x)
