@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+	"time"
 )
 
 var wordList = []string{
@@ -69,7 +70,9 @@ func main() {
 			}
 		} else if GameMode == 2 {
 			//show stats
-			fmt.Println("Streak: "+ string(streaks))
+			fmt.Println("Streak: "+ strconv.Itoa(streaks))
+			time.Sleep(1 * time.Second)
+
 		} else if GameMode == 0 {
 			//error or exit
 			break
