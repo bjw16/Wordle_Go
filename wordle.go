@@ -210,11 +210,11 @@ func printTurn(currTurn int, guess string, answer string) {
 				//https://www.dolthub.com/blog/2024-02-23-colors-in-golang/
 				if string(answer[i]) == strings.ToUpper(string(y)) {
 					//ANSI for green background, and resets format
-					fmt.Print("\033[42m"+ strings.ToUpper(string(y)) + "\033[0m")
+					fmt.Print("\033[32m"+ strings.ToUpper(string(y)) + "\033[0m")
 
 				} else if strings.Contains(answer, strings.ToUpper(string(y))) {
 					//ANSI for yellow background, and resets format
-					fmt.Print("\033[43m" + strings.ToUpper(string(y)) + "\033[0m")
+					fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m")
 				} else {
 					fmt.Print(strings.ToUpper(string(y)))
 				}
