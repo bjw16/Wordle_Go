@@ -10,11 +10,56 @@ import (
 )
 
 var wordList = []string{
-	"FETCH",
-	"PARRY",
-	"LOINS",
-	"LUNGS",
-	"TWIST",
+	"APPLE",
+	"BERRY",
+	"CHARM",
+	"DREAM",
+	"EAGLE",
+	"FLAME",
+	"GRAPE",
+	"HOUSE",
+	"IVORY",
+	"JOLLY",
+	"KINGS",
+	"LEMON",
+	"MAGIC",
+	"NOBLE",
+	"OCEAN",
+	"PLANT",
+	"QUICK",
+	"RIVER",
+	"STONE",
+	"TIGER",
+	"VIVID",
+	"WHEAT",
+	"YIELD",
+	"ZEBRA",
+	"BLAZE",
+	"CRANE",
+	"DRIFT",
+	"FROST",
+	"GLINT",
+	"HAVEN",
+	"INLET",
+	"JEWEL",
+	"KNOLL",
+	"LARCH",
+	"MIRTH",
+	"NEXUS",
+	"OLIVE",
+	"PRISM",
+	"QUEST",
+	"RIDGE",
+	"SPARK",
+	"THORN",
+	"UNITY",
+	"VALOR",
+	"WILLOW",
+	"XENON",
+	"YOUTH",
+	"ZIPPY",
+	"ALPHA",
+	"BRAVO",
 }
 var possibleLetters []string
 var gameResults [Turns][letterCount]string
@@ -165,7 +210,7 @@ func printTurn(currTurn int, guess string, answer string) {
 				//https://www.dolthub.com/blog/2024-02-23-colors-in-golang/
 				if string(answer[i]) == strings.ToUpper(string(y)) {
 					//ANSI for green background, and resets format
-					fmt.Print("\033[32m" + strings.ToUpper(string(y)) + "\033[0m")
+					fmt.Print("\033[42m"+ strings.ToUpper(string(y)) + "\033[0m")
 
 				} else if strings.Contains(answer, strings.ToUpper(string(y))) {
 					//ANSI for yellow background, and resets format
@@ -209,11 +254,14 @@ func printPossibleLetters() {
 			fmt.Print(strings.ToUpper(string(x[0])) + " ")
 		} else if len(x) == 2 {
 			if string(x[1]) == "-" {
-				fmt.Print("\033[33m" + string(x[0]) + " " + "\033[0m")
+				//yelow
+				fmt.Print("\033[43m" + string(x[0]) + " " + "\033[0m")
 			} else {
-				fmt.Print("\033[32m" + string(x[0]) + " " + "\033[0m")
+				//green
+				fmt.Print("\033[42m" + string(x[0]) + " " + "\033[0m")
 			}
 		} else {
+			//normal color
 			fmt.Print("\033[47m" + x + " " + "\033[0m")
 		}
 
