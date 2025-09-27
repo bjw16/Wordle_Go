@@ -5,7 +5,6 @@ import (
 	"math/rand"
 	"strconv"
 	"strings"
-	"unicode"
 	"time"
 )
 
@@ -61,7 +60,8 @@ var wordList = []string{
 	"ALPHA",
 	"BRAVO",
 }
-var possibleLetters []string
+var possibleLetters map[rune]int = make(map[rune]int)
+
 var gameResults [Turns][letterCount]string
 
 // var streak int = 0
@@ -75,10 +75,33 @@ func setArrays() {
 			gameResults[i][j] = "_"
 		}
 	}
-	possibleLetters = []string{
-		"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
-		"A", "S", "D", "F", "G", "H", "J", "K", "O", "L",
-		"Z", "X", "C", "V", "B", "N", "M",
+	possibleLetters = map[rune]int{
+		'A' : 0,
+		'B' : 0,
+		'C' : 0,
+		'D' : 0,
+		'E' : 0,
+		'F' : 0,
+		'G' : 0,
+		'H' : 0,
+		'I' : 0,
+		'J' : 0,
+		'K' : 0,
+		'L' : 0,
+		'M' : 0,
+		'N' : 0,
+		'O' : 0,
+		'P' : 0,
+		'Q' : 0,
+		'R' : 0,
+		'S' : 0,
+		'T' : 0,
+		'U' : 0,
+		'V' : 0,
+		'W' : 0,
+		'X' : 0,
+		'Y' : 0,
+		'Z' : 0,
 	}
 }
 
@@ -187,6 +210,7 @@ func playGame() bool {
 			printTurn(x+1, guess, wordAnswer)
 			break
 		} else {
+			//else, it's not the end of game. Continue playing game
 			makePossibleLettersChoosen(wordAnswer, guess)
 			continue
 		}
@@ -249,25 +273,28 @@ func printPossibleLetters() {
 	//check each letter to see if it is in the game results
 	//color code chosen letters based on if they are in the right place or contained
 	//in the word
-	for i, x := range possibleLetters {
-		if unicode.IsLower(rune(x[0])) == true {
-			fmt.Print(strings.ToUpper(string(x[0])) + " ")
-		} else if len(x) == 2 {
-			if string(x[1]) == "-" {
-				//yelow
-				fmt.Print("\033[43m" + string(x[0]) + " " + "\033[0m")
-			} else {
-				//green
-				fmt.Print("\033[42m" + string(x[0]) + " " + "\033[0m")
-			}
-		} else {
-			//normal color
-			fmt.Print("\033[47m" + x + " " + "\033[0m")
-		}
 
-		if i == 9 {
+
+	for i, x := range possibleLetters {
+		
+		if x == 0 {
+			//what to print when letter wasn't chosen
+			fmt.Print(strings.ToUpper(string(i)) + " ")
+		} else if x ==  2 {
+			//what to print if letter was in word but not at right position
+			fmt.Print("\033[43m" + string(i) + " " + "\033[0m")
+		} else if x == 1 {
+			//what to print if letter was in word and in right position
+			fmt.Print("\033[42m" + string(i) + " " + "\033[0m")
+		} else if x == -1 {
+			//what to print when letter was choosen
+			fmt.Print("\033[47m" + string(i) + " " + "\033[0m")
+		}
+		
+		
+		if i == 'I' {
 			fmt.Println("")
-		} else if i == 19 {
+		} else if i == 'S' {
 			fmt.Println("")
 			fmt.Print("  ")
 		}
@@ -278,36 +305,22 @@ func printPossibleLetters() {
 // Essentially, if letter is chosen, we will make it lowercase
 // this will help with printing
 func makePossibleLettersChoosen(answer string, userChoice string) {
-	for n, x := range userChoice {
-		var green bool = false
-		//this is lower casing if letters were contained in word
-		if strings.Contains(answer, string(x)) {
-			for i, y := range answer {
-				if y == x && i == n {
-					green = true
-					break
-				}
-			}
-			if green == true {
-				possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToUpper(string(x)) + "+"
+	for n, x := range userChoice {	
+		if strings.Contains(answer, string(x)){
+			if rune(answer[n]) == x {
+				//turn green
+				//Letter in word and in right place
+				possibleLetters[x] = 1
 			} else {
-				possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToUpper(string(x)) + "-"
+				//turns yellow
+				//Letter in word but not in right place
+				possibleLetters[x] = 2
 			}
 		} else {
-			possibleLetters[findLetterPosition(strings.ToUpper(string(x)))] = strings.ToLower(string(x))
+			//turn white
+			//letter not in word, and is now selected
+			possibleLetters[x] = -1
 		}
 	}
 }
 
-// make sure letter is upper case when sent as parameter
-func findLetterPosition(letter string) int {
-	var index int
-	for i, x := range possibleLetters {
-		//fmt.Println(x)
-		if x == letter {
-			index = i
-			break
-		}
-	}
-	return index
-}
