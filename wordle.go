@@ -247,6 +247,7 @@ func playGame() bool {
 			continue
 		}
 	}
+	fmt.Println("Answer: " + wordAnswer)
 	return winOrLose
 }
 
