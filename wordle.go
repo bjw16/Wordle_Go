@@ -337,7 +337,6 @@ func printPossibleLetters() {
 // Essentially, if letter is chosen, we will make it lowercase
 // this will help with printing
 func makePossibleLettersChoosen(answer string, userChoice string) {
-	fmt.Println(possibleLetters)
 	for n, x := range userChoice {	
 		if strings.Contains(answer, string(x)){
 			if rune(answer[n]) == x {
@@ -357,5 +356,15 @@ func makePossibleLettersChoosen(answer string, userChoice string) {
 			possibleLetters[x] = -1
 		}
 	}
+}
+//checks if all characters are letters in a string
+func isAllLetterInString (x string) bool{
+	//check if any characters but letters in guess
+	for _, y := range x {
+		if unicode.IsLetter(y) == false {
+			return false
+		}
+	}
+	return true
 }
 
