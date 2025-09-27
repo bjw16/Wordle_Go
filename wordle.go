@@ -170,6 +170,8 @@ func main() {
 		} else if GameMode == 0 {
 			//error or exit
 			break
+		} else {
+			fmt.Println("No associated input. Please try again!")
 		}
 		fmt.Println("")
 	}
@@ -208,12 +210,12 @@ func playGame() bool {
 			fmt.Print("> ")
 			fmt.Scan(&guess)
 			if len(guess) < letterCount || len(guess) > letterCount {
+				printTurn(x, guess, wordAnswer)
 				if len(guess) < letterCount {
 					fmt.Println("Guess to small, try again!")
 				} else {
 					fmt.Println("Guess to big, try again!")
 				}
-				printTurn(x, guess, wordAnswer)
 				printPossibleLetters()
 				guess = ""
 			} else {
