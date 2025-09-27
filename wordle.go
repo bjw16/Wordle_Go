@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 )
 
 var wordList = []string{
@@ -213,14 +214,18 @@ func playGame() bool {
 				printTurn(x, guess, wordAnswer)
 				if len(guess) < letterCount {
 					fmt.Println("Guess to small, try again!")
-				} else {
+				} else  if len(guess) > letterCount {
 					fmt.Println("Guess to big, try again!")
-				}
+				} 
+				printPossibleLetters()
+				guess = ""
+			} else if isAllLetterInString(guess) == false{
+				fmt.Println("Guess contains numbers. Try again!")
 				printPossibleLetters()
 				guess = ""
 			} else {
+				//breaks look if no issues
 				break
-
 			}
 		}
 		fmt.Println("")
@@ -330,7 +335,6 @@ func printPossibleLetters() {
 // Essentially, if letter is chosen, we will make it lowercase
 // this will help with printing
 func makePossibleLettersChoosen(answer string, userChoice string) {
-	fmt.Println(possibleLetters)
 	for n, x := range userChoice {	
 		if strings.Contains(answer, string(x)){
 			if rune(answer[n]) == x {
@@ -352,3 +356,13 @@ func makePossibleLettersChoosen(answer string, userChoice string) {
 	}
 }
 
+//checks if all characters are letters in a string
+func isAllLetterInString (x string) bool{
+	//check if any characters but letters in guess
+	for _, y := range x {
+		if unicode.IsLetter(y) == false {
+			return false
+		}
+	}
+	return true
+}
