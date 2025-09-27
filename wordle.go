@@ -63,32 +63,32 @@ var wordList = []string{
 var possibleLetters map[rune]int = make(map[rune]int)
 
 var sortOrderPossibleLetters = []rune{
-		'Q',
-		'W',
-		'E',
-		'R',
-		'T',
-		'Y',
-		'U',
-		'I',
-		'O',
-		'P',
-		'A',
-		'S',
-		'D',
-		'F',
-		'G',
-		'H',
-		'J',
-		'K',
-		'L',
-		'Z',
-		'X',
-		'C',
-		'V',
-		'B',
-		'N',
-		'M',
+	'Q',
+	'W',
+	'E',
+	'R',
+	'T',
+	'Y',
+	'U',
+	'I',
+	'O',
+	'P',
+	'A',
+	'S',
+	'D',
+	'F',
+	'G',
+	'H',
+	'J',
+	'K',
+	'L',
+	'Z',
+	'X',
+	'C',
+	'V',
+	'B',
+	'N',
+	'M',
 }
 
 var gameResults [Turns][letterCount]string
@@ -96,6 +96,7 @@ var gameResults [Turns][letterCount]string
 // var streak int = 0
 const Turns int = 6
 const letterCount int = 5
+
 var streaks int = 0
 
 func setArrays() {
@@ -105,32 +106,32 @@ func setArrays() {
 		}
 	}
 	possibleLetters = map[rune]int{
-		'Q' : 0,
-		'W' : 0,
-		'E' : 0,
-		'R' : 0,
-		'T' : 0,
-		'Y' : 0,
-		'U' : 0,
-		'I' : 0,
-		'O' : 0,
-		'P' : 0,
-		'A' : 0,
-		'S' : 0,
-		'D' : 0,
-		'F' : 0,
-		'G' : 0,
-		'H' : 0,
-		'J' : 0,
-		'K' : 0,
-		'L' : 0,
-		'Z' : 0,
-		'X' : 0,
-		'C' : 0,
-		'V' : 0,
-		'B' : 0,
-		'N' : 0,
-		'M' : 0,
+		'Q': 0,
+		'W': 0,
+		'E': 0,
+		'R': 0,
+		'T': 0,
+		'Y': 0,
+		'U': 0,
+		'I': 0,
+		'O': 0,
+		'P': 0,
+		'A': 0,
+		'S': 0,
+		'D': 0,
+		'F': 0,
+		'G': 0,
+		'H': 0,
+		'J': 0,
+		'K': 0,
+		'L': 0,
+		'Z': 0,
+		'X': 0,
+		'C': 0,
+		'V': 0,
+		'B': 0,
+		'N': 0,
+		'M': 0,
 	}
 }
 
@@ -145,7 +146,7 @@ func main() {
 			printIntro()
 			fmt.Scan(&GameMode)
 		}
-		if GameMode == 1 || playAgain == true{
+		if GameMode == 1 || playAgain == true {
 			//play game
 			setArrays()
 			results = playGame()
@@ -164,7 +165,7 @@ func main() {
 			}
 		} else if GameMode == 2 {
 			//show stats
-			fmt.Println("Streak: "+ strconv.Itoa(streaks))
+			fmt.Println("Streak: " + strconv.Itoa(streaks))
 			time.Sleep(1 * time.Second)
 
 		} else if GameMode == 0 {
@@ -265,7 +266,7 @@ func printTurn(currTurn int, guess string, answer string) {
 				//https://www.dolthub.com/blog/2024-02-23-colors-in-golang/
 				if string(answer[i]) == strings.ToUpper(string(y)) {
 					//ANSI for green background, and resets format
-					fmt.Print("\033[32m"+ strings.ToUpper(string(y)) + "\033[0m")
+					fmt.Print("\033[32m" + strings.ToUpper(string(y)) + "\033[0m")
 
 				} else if strings.Contains(answer, strings.ToUpper(string(y))) {
 					//ANSI for yellow background, and resets format
@@ -304,8 +305,8 @@ func printPossibleLetters() {
 	for _, x := range sortOrderPossibleLetters {
 		if possibleLetters[x] == 0 {
 			//what to print when letter wasn't chosen
-			fmt.Print(string(x) + " ")
-		} else if possibleLetters[x] ==  2 {
+			fmt.Print("\033[47m" + string(x) + " " + "\033[0m")
+		} else if possibleLetters[x] == 2 {
 			//what to print if letter was in word but not at right position
 			fmt.Print("\033[43m" + string(x) + " " + "\033[0m")
 		} else if possibleLetters[x] == 1 {
@@ -313,9 +314,9 @@ func printPossibleLetters() {
 			fmt.Print("\033[42m" + string(x) + " " + "\033[0m")
 		} else if possibleLetters[x] == -1 {
 			//what to print when letter was choosen, but not in word
-			fmt.Print("\033[47m" + string(x) + " " + "\033[0m")
+			fmt.Print(string(x) + " ")
 		}
-		
+
 		//Print formatting adjustments at certain circumstances
 		if x == 'P' {
 			fmt.Println("")
@@ -330,9 +331,8 @@ func printPossibleLetters() {
 // Essentially, if letter is chosen, we will make it lowercase
 // this will help with printing
 func makePossibleLettersChoosen(answer string, userChoice string) {
-	fmt.Println(possibleLetters)
-	for n, x := range userChoice {	
-		if strings.Contains(answer, string(x)){
+	for n, x := range userChoice {
+		if strings.Contains(answer, string(x)) {
 			if rune(answer[n]) == x {
 				//turn green
 				//Letter in word and in right place
@@ -351,4 +351,3 @@ func makePossibleLettersChoosen(answer string, userChoice string) {
 		}
 	}
 }
-
