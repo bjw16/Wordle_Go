@@ -54,7 +54,6 @@ var wordList = []string{
 	"THORN",
 	"UNITY",
 	"VALOR",
-	"WILLOW",
 	"XENON",
 	"YOUTH",
 	"ZIPPY",
@@ -238,7 +237,7 @@ func playGame() bool {
 		}
 
 		//Determines if guess matches selected word
-		if guess == wordAnswer {
+		if strings.ToUpper(guess) == wordAnswer {
 			winOrLose = true
 			printTurn(x+1, guess, wordAnswer)
 			break
