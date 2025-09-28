@@ -91,13 +91,12 @@ var sortOrderPossibleLetters = []rune{
 	'M',
 }
 
-var gameResults [Turns][letterCount]string
-
-// var streak int = 0
+//Would like to make it where game is dynamic. Players can set own turns or lettercountf
 const Turns int = 6
 const letterCount int = 5
-
 var streaks int = 0
+var gameResults [Turns][letterCount]string
+
 
 func setArrays() {
 	for i := range gameResults {
@@ -136,17 +135,20 @@ func setArrays() {
 }
 
 func main() {
-	var GameMode int
 	var playAgain bool = false
 
 	for true {
+		var GameMode string
+		var GameModeInt int
+		var GameModeError error
 		var results bool
 		var playAgainResponse int
 		if playAgain != true {
 			printIntro()
 			fmt.Scan(&GameMode)
+			GameModeInt, GameModeError = strconv.Atoi(GameMode)
 		}
-		if GameMode == 1 || playAgain == true {
+		if GameModeInt == 1 || playAgain == true {
 			//play game
 			setArrays()
 			results = playGame()
@@ -163,12 +165,12 @@ func main() {
 				playAgain = false
 				continue
 			}
-		} else if GameMode == 2 {
+		} else if GameModeInt == 2 && GameModeError == nil {
 			//show stats
 			fmt.Println("Streak: " + strconv.Itoa(streaks))
 			time.Sleep(1 * time.Second)
 
-		} else if GameMode == 0 {
+		} else if GameModeInt == 0 && GameModeError == nil{
 			//error or exit
 			break
 		} else {
