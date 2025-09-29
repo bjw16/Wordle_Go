@@ -106,11 +106,13 @@ var gameResults [Turns][letterCount]string
 
 //used to set/reset game results and available letters after games
 func setArrays() {
+	//load guess array
 	for i := range gameResults {
 		for j := range gameResults[i] {
 			gameResults[i][j] = "_"
 		}
 	}
+	//available letters set to 0 as they have not been selected
 	availableLetters = map[rune]int{
 		'Q': 0,
 		'W': 0,
@@ -391,7 +393,7 @@ func checkGuessMatch(answer string, guess string) {
 				//Letter in word and in right place
 				availableLetters[x] = 1
 			} else {
-				//Letter in word but not in right place
+				//used to ensure green letter never turns yellow
 				if availableLetters[x] != 1 {
 					//turns yellow - [2]
 					availableLetters[x] = 2
