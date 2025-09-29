@@ -135,36 +135,44 @@ func setArrays() {
 }
 
 func main() {
-	var playAgain bool = false
+	var playAgain int = 0
 
 	for true {
 		var GameMode string
 		var GameModeInt int
 		var GameModeError error
 		var results bool
-		var playAgainResponse int
-		if playAgain != true {
+		var playAgainResponse string
+		var playAgainError error
+		if playAgain != 1 {
 			printIntro()
 			fmt.Scan(&GameMode)
 			GameModeInt, GameModeError = strconv.Atoi(GameMode)
 		}
-		if GameModeInt == 1 || playAgain == true {
+		if GameModeInt == 1 || playAgain == 1 {
+			//reset playAgain
+			playAgain = 0
 			//play game
 			setArrays()
 			results = playGame()
 
 			//play again
-			printWinLose(results)
-			fmt.Print("> ")
-			fmt.Scan(&playAgainResponse)
-			if playAgainResponse == 1 {
-				//play again
-				playAgain = true
-				continue
-			} else if playAgainResponse == 0 {
-				playAgain = false
-				continue
+			for true {
+				printWinLose(results)
+				fmt.Print("> ")
+				fmt.Scan(&playAgainResponse)
+				playAgain, playAgainError = strconv.Atoi(playAgainResponse)
+				if playAgainError != nil || playAgain >= 2 || playAgain < 0 {
+					//play again
+					fmt.Println("No associated input. Please try again!")
+					fmt.Println("")
+					playAgain = 0
+					continue
+				} else {
+					break
+				}
 			}
+
 		} else if GameModeInt == 2 && GameModeError == nil {
 			//show stats
 			fmt.Println("Streak: " + strconv.Itoa(streaks))
@@ -176,6 +184,9 @@ func main() {
 		} else {
 			fmt.Println("No associated input. Please try again!")
 		}
+		//resets
+		playAgainResponse = ""
+		GameMode = ""
 		fmt.Println("")
 	}
 }
@@ -300,7 +311,7 @@ func printTurn(currTurn int, guess string, answer string) {
 
 func printWinLose(win bool) {
 	if win == true {
-		fmt.Println("You win! Play again? (1 - Yes, 2 - No)")
+		fmt.Println("You win! Play again? (1 - Yes, 0 - No)")
 		streaks += streaks + 1
 	} else {
 		fmt.Println("You loose! Play again? (1 - Yes, 0 - No)")
