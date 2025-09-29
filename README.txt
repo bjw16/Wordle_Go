@@ -1,3 +1,4 @@
-To compile and run code:
-go run wordle.go
+Wordle in Golang
+Run game:
+  go run wordle.go
 
