@@ -9,6 +9,7 @@ import (
 	"unicode"
 )
 
+//Array of strings for available Wordle answers
 var wordList = []string{
 	"APPLE",
 	"BERRY",
@@ -60,9 +61,13 @@ var wordList = []string{
 	"ALPHA",
 	"BRAVO",
 }
-var possibleLetters map[rune]int = make(map[rune]int)
 
-var sortOrderPossibleLetters = []rune{
+//Map used to track available letters
+var availableLetters map[rune]int = make(map[rune]int)
+
+//Sorting order to print available letters in order as seen
+//on wordle keyboard
+var sortOrderavailableLetters = []rune{
 	'Q',
 	'W',
 	'E',
@@ -95,16 +100,18 @@ var sortOrderPossibleLetters = []rune{
 const Turns int = 6
 const letterCount int = 5
 var streaks int = 0
+
+//2D array of strings to track each guess
 var gameResults [Turns][letterCount]string
 
-
+//used to set/reset game results and available letters after games
 func setArrays() {
 	for i := range gameResults {
 		for j := range gameResults[i] {
 			gameResults[i][j] = "_"
 		}
 	}
-	possibleLetters = map[rune]int{
+	availableLetters = map[rune]int{
 		'Q': 0,
 		'W': 0,
 		'E': 0,
@@ -135,64 +142,85 @@ func setArrays() {
 }
 
 func main() {
+	//Value used to track if player would like to play again
 	var playAgain int = 0
 
 	for true {
-		var GameMode string
-		var GameModeInt int
-		var GameModeError error
+		//Game mode used to track menu selection
+		var MenuSetting string
+		var MenuSettingInt int
+		var MenuSettingError error
+
+		//tracks [win - t] or [lose - f] results
 		var results bool
+
+		//tracks if player would like to play again
 		var playAgainResponse string
 		var playAgainError error
+
+		//Used to avoid printing menu
+		//if playing again
 		if playAgain != 1 {
-			printIntro()
-			fmt.Scan(&GameMode)
-			GameModeInt, GameModeError = strconv.Atoi(GameMode)
+			//prints menu options
+			printMenu()
+
+			//read in menu selection
+			fmt.Scan(&MenuSetting)
+			MenuSettingInt, MenuSettingError = strconv.Atoi(MenuSetting)
 		}
-		if GameModeInt == 1 || playAgain == 1 {
-			//reset playAgain
+		//If user selected 1 or decided to play again last game set by previous loop through
+		if MenuSettingInt == 1 || playAgain == 1 {
+			//reset playAgain value
 			playAgain = 0
-			//play game
+
+			//load game data structures
 			setArrays()
+
 			results = playGame()
 
-			//play again
+			//Play again input handler
 			for true {
+				//print game results
 				printWinLose(results)
+
 				fmt.Print("> ")
+
+				//record input
 				fmt.Scan(&playAgainResponse)
+
+				//convert input to int
 				playAgain, playAgainError = strconv.Atoi(playAgainResponse)
+
+				//Determines if input is correct
 				if playAgainError != nil || playAgain >= 2 || playAgain < 0 {
-					//play again
 					fmt.Println("No associated input. Please try again!")
 					fmt.Println("")
-					playAgain = 0
 					continue
 				} else {
+					//breaks loop if input is correct
 					break
 				}
 			}
-
-		} else if GameModeInt == 2 && GameModeError == nil {
-			//show stats
+		//Streaks menu option
+		} else if MenuSettingInt == 2 && MenuSettingError == nil {
+			//show stats for 1 second
 			fmt.Println("Streak: " + strconv.Itoa(streaks))
 			time.Sleep(1 * time.Second)
-
-		} else if GameModeInt == 0 && GameModeError == nil{
-			//error or exit
+		//Exit game menu option
+		} else if MenuSettingInt == 0 && MenuSettingError == nil{
 			break
+		//Incorrect input handler
 		} else {
 			fmt.Println("No associated input. Please try again!")
 		}
 		//resets
 		playAgainResponse = ""
-		GameMode = ""
+		MenuSetting = ""
 		fmt.Println("")
 	}
 }
 
-func printIntro() {
-	//game_loop
+func printMenu() {
 	fmt.Println("")
 	fmt.Println("WORDLE_GO")
 	fmt.Println("")
@@ -204,110 +232,141 @@ func printIntro() {
 }
 
 // function to play full game - module
+// return 1 for win, 0 for lose
 func playGame() bool {
-	//randomizes word
-	wordAnswer := wordList[rand.Intn(len(wordList))]
+	//randomizes games answer each time function is ran
+	wordle := wordList[rand.Intn(len(wordList))]
+
 	var winOrLose bool
 	var guess string = ""
 
-	//print turn
+	//main game loop
+	//play until out of turns
 	for x := 0; x < Turns; x++ {
-		//var playAgain int
-		printTurn(x+1, guess, wordAnswer)
-		printPossibleLetters()
+		//Print round x and available letters
+		printTurn(x+1, guess, wordle)
+		printAvailableLetters()
 		//resets guess
 		guess = ""
 
-		//player guess response
+		//guess input handler
 		for {
 			fmt.Println("")
 			fmt.Print("> ")
+
+			//guess input
 			fmt.Scan(&guess)
+
+			//if quess has too many or too few letters
 			if len(guess) < letterCount || len(guess) > letterCount {
-				printTurn(x, guess, wordAnswer)
+				//print turn agian with error
+				printTurn(x, guess, wordle)
+				printAvailableLetters()
 				if len(guess) < letterCount {
 					fmt.Println("Guess to small, try again!")
 				} else  if len(guess) > letterCount {
 					fmt.Println("Guess to big, try again!")
 				} 
-				printPossibleLetters()
+				//reset
 				guess = ""
+			//Error check: Number input
 			} else if isAllLetterInString(guess) == false{
 				fmt.Println("Guess contains numbers. Try again!")
-				printPossibleLetters()
+				printAvailableLetters()
+				//reset
 				guess = ""
+			//breaks handler if no issues
 			} else {
-				//breaks look if no issues
 				break
 			}
 		}
 		fmt.Println("")
-		//need error check if less than 5 letters
 
 		//stores guess into results
 		for y := 0; y < letterCount; y++ {
 			gameResults[x][y] = string(guess[y])
 		}
 
-		//Determines if guess matches selected word
-		if strings.ToUpper(guess) == wordAnswer {
+		//Determines if guess matches wordle
+		//Win and break play loop
+		if strings.ToUpper(guess) == wordle {
 			winOrLose = true
-			printTurn(x+1, guess, wordAnswer)
+			printTurn(x+1, guess, wordle)
 			break
+		//out of guesses
+		//loose and break play loop
 		} else if x == Turns-1 {
 			winOrLose = false
-			printTurn(x+1, guess, wordAnswer)
+			printTurn(x+1, guess, wordle)
 			break
+		//Game not over. Continue game loop
 		} else {
-			//else, it's not the end of game. Continue playing game
-			makePossibleLettersChoosen(wordAnswer, guess)
+			checkGuessMatch(wordle, guess)
 			continue
 		}
 	}
-	fmt.Println("Answer: " + wordAnswer)
+	//Print winning wordle
+	fmt.Println("Answer: " + wordle)
+
+	//return results
 	return winOrLose
 }
 
-// print results for all turns so far
+// print this rounds turn i.e. guess array
 func printTurn(currTurn int, guess string, answer string) {
+	//prints current turn number
 	fmt.Println("Turn: " + strconv.Itoa(currTurn))
+
+	//checks if user hasn't guessed yet
 	if guess != "" {
+		//prints previous guess
 		fmt.Println("Guess: " + guess)
+
+		//Prints game results simimlar to printing out native array
+		//This allows me to color code each letter
+		//Selects 1 guess at a time
 		for _, x := range gameResults {
-			//determines what letters match and do not match
+			//prints each letter of word x by color
 			for i, y := range x {
-				//checks if letters match
+				//prints first "[" at beginning of array
 				if i == 0 {
 					fmt.Print("[")
 				}
 
 				//https://www.dolthub.com/blog/2024-02-23-colors-in-golang/
+				//prints each letter color coded
 				if string(answer[i]) == strings.ToUpper(string(y)) {
 					//ANSI for green background, and resets format
+					//letter in correct position
 					fmt.Print("\033[32m" + strings.ToUpper(string(y)) + "\033[0m")
 
 				} else if strings.Contains(answer, strings.ToUpper(string(y))) {
 					//ANSI for yellow background, and resets format
+					//letter in word but incorrect possition
 					fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m")
 				} else {
+					//letter is not a match
 					fmt.Print(strings.ToUpper(string(y)))
 				}
 
+				//prints space for array display
 				if i != len(x)-1 {
 					fmt.Print(" ")
 				}
-
 			}
+			//prints end bracket for each row/guess
 			fmt.Print("]")
 			fmt.Println("")
 
 		}
+	//prints out empty array before user has had first guess
 	} else {
 		for _, x := range gameResults {
 			fmt.Println(x)
 		}
 	}
 }
+
 
 func printWinLose(win bool) {
 	if win == true {
@@ -319,23 +378,57 @@ func printWinLose(win bool) {
 	}
 }
 
-func printPossibleLetters() {
-	for _, x := range sortOrderPossibleLetters {
-		if possibleLetters[x] == 0 {
+//compare guess to answer
+//Codes printing of available letters, set color coding
+func checkGuessMatch(answer string, guess string) {
+	//compare each letter of guess to answer
+	for n, x := range guess {	
+		//checks if letter is in guess
+		if strings.Contains(answer, string(x)){
+			//if guess[n] == answer[n] aka index match
+			if rune(answer[n]) == x {
+				//turn green - [1]
+				//Letter in word and in right place
+				availableLetters[x] = 1
+			} else {
+				//Letter in word but not in right place
+				if availableLetters[x] != 1 {
+					//turns yellow - [2]
+					availableLetters[x] = 2
+				}
+			}
+		//
+		} else {
+			//turn white - [-1]
+			//letter not in word, and is now already been used
+			availableLetters[x] = -1
+		}
+	}
+}
+
+//prints available letters - color coded
+//set under guess array
+func printAvailableLetters() {
+	//sorts through letters and color code
+	for _, x := range sortOrderavailableLetters {
+		if availableLetters[x] == 0 {
 			//what to print when letter wasn't chosen
+			//white color
 			fmt.Print("\033[47m" + string(x) + " " + "\033[0m")
-		} else if possibleLetters[x] == 2 {
+		} else if availableLetters[x] == 2 {
 			//what to print if letter was in word but not at right position
+			//yellow
 			fmt.Print("\033[43m" + string(x) + " " + "\033[0m")
-		} else if possibleLetters[x] == 1 {
+		} else if availableLetters[x] == 1 {
 			//what to print if letter was in word and in right position
+			//green
 			fmt.Print("\033[42m" + string(x) + " " + "\033[0m")
-		} else if possibleLetters[x] == -1 {
+		} else if availableLetters[x] == -1 {
 			//what to print when letter was choosen, but not in word
 			fmt.Print(string(x) + " ")
 		}
 
-		//Print formatting adjustments at certain circumstances
+		//Prints new line at last letter for keyboard formatting
 		if x == 'P' {
 			fmt.Println("")
 		} else if x == 'L' {
@@ -346,29 +439,6 @@ func printPossibleLetters() {
 	fmt.Println("")
 }
 
-// Essentially, if letter is chosen, we will make it lowercase
-// this will help with printing
-func makePossibleLettersChoosen(answer string, userChoice string) {
-	for n, x := range userChoice {	
-		if strings.Contains(answer, string(x)){
-			if rune(answer[n]) == x {
-				//turn green
-				//Letter in word and in right place
-				possibleLetters[x] = 1
-			} else {
-				//turns yellow
-				//Letter in word but not in right place
-				if possibleLetters[x] != 1 {
-					possibleLetters[x] = 2
-				}
-			}
-		} else {
-			//turn white
-			//letter not in word, and is now selected
-			possibleLetters[x] = -1
-		}
-	}
-}
 //checks if all characters are letters in a string
 func isAllLetterInString (x string) bool{
 	//check if any characters but letters in guess
