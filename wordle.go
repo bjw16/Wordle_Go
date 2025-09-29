@@ -96,20 +96,20 @@ var sortOrderavailableLetters = []rune{
 	'M',
 }
 
-//Would like to make it where game is dynamic. Players can set own turns or lettercountf
-const Turns int = 6
+//Would like to make it where game is dynamic. Players can set own turns or lettercount
+const turns int = 6
 const letterCount int = 5
 var streaks int = 0
 
 //2D array of strings to track each guess
-var gameResults [Turns][letterCount]string
+var guessArray [turns][letterCount]string
 
 //used to set/reset game results and available letters after games
 func setArrays() {
 	//load guess array
-	for i := range gameResults {
-		for j := range gameResults[i] {
-			gameResults[i][j] = "_"
+	for i := range guessArray {
+		for j := range guessArray[i] {
+			guessArray[i][j] = "_"
 		}
 	}
 	//available letters set to 0 as they have not been selected
@@ -147,8 +147,9 @@ func main() {
 	//Value used to track if player would like to play again
 	var playAgain int = 0
 
+	//menu loop
 	for true {
-		//Game mode used to track menu selection
+		//Menu setting used to track menu selection
 		var MenuSetting string
 		var MenuSettingInt int
 		var MenuSettingError error
@@ -244,7 +245,7 @@ func playGame() bool {
 
 	//main game loop
 	//play until out of turns
-	for x := 0; x < Turns; x++ {
+	for x := 0; x < turns; x++ {
 		//Print round x and available letters
 		printTurn(x+1, guess, wordle)
 		printAvailableLetters()
@@ -265,16 +266,19 @@ func playGame() bool {
 				printTurn(x, guess, wordle)
 				printAvailableLetters()
 				if len(guess) < letterCount {
-					fmt.Println("Guess to small, try again!")
+					fmt.Println("Guess to small. Try again!")
 				} else  if len(guess) > letterCount {
-					fmt.Println("Guess to big, try again!")
+					fmt.Println("Guess to big. Try again!")
 				} 
 				//reset
 				guess = ""
 			//Error check: Number input
 			} else if isAllLetterInString(guess) == false{
-				fmt.Println("Guess contains numbers. Try again!")
+				//print turn agian with error
+				printTurn(x, guess, wordle)
 				printAvailableLetters()
+				fmt.Println("Guess contains numbers. Try again!")
+		
 				//reset
 				guess = ""
 			//breaks handler if no issues
@@ -286,7 +290,7 @@ func playGame() bool {
 
 		//stores guess into results
 		for y := 0; y < letterCount; y++ {
-			gameResults[x][y] = string(guess[y])
+			guessArray[x][y] = string(guess[y])
 		}
 
 		//Determines if guess matches wordle
@@ -297,7 +301,7 @@ func playGame() bool {
 			break
 		//out of guesses
 		//loose and break play loop
-		} else if x == Turns-1 {
+		} else if x == turns-1 {
 			winOrLose = false
 			printTurn(x+1, guess, wordle)
 			break
@@ -327,7 +331,7 @@ func printTurn(currTurn int, guess string, answer string) {
 		//Prints game results simimlar to printing out native array
 		//This allows me to color code each letter
 		//Selects 1 guess at a time
-		for _, x := range gameResults {
+		for _, x := range guessArray {
 			//prints each letter of word x by color
 			for i, y := range x {
 				//prints first "[" at beginning of array
@@ -363,7 +367,7 @@ func printTurn(currTurn int, guess string, answer string) {
 		}
 	//prints out empty array before user has had first guess
 	} else {
-		for _, x := range gameResults {
+		for _, x := range guessArray {
 			fmt.Println(x)
 		}
 	}
