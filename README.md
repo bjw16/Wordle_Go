@@ -23,8 +23,8 @@ A Go-based command line clone of the popular Wordle game, created as a project t
 
 You can see an example of the game's output below.  
 
+![Screen Recording 2025-09-28 at 11 43 05 PM](https://github.com/user-attachments/assets/2e731150-725c-499f-86b1-2281642d274d)
 
-![Screen Recording 2025-09-28 at 11 43 05 PM](https://github.com/user-attachments/assets/efe68769-567b-46b4-b37d-ef3ee548ed9f)
 
 
 
