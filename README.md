@@ -1,4 +1,3 @@
-Generated with Co-Pilot
 # Wordle_Go
 
 A Go-based command line clone of the popular Wordle game, created as a project to learn Golang.
@@ -36,3 +35,6 @@ _Paste your sample game output or screenshot here._
 
 This project is for learning purposes and has no specific license.
 
+
+## Note
+Readme generated with Co-Pilot
