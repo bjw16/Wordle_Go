@@ -238,6 +238,8 @@ func printMenu() {
 // return 1 for win, 0 for lose
 func playGame() bool {
 	//randomizes games answer each time function is ran
+	//https://www.geeksforgeeks.org/go-language/generating-random-numbers-in-golang/
+	rand.Seed(time.Now().UnixNano())
 	wordle := wordList[rand.Intn(len(wordList))]
 
 	var winOrLose bool
@@ -307,7 +309,7 @@ func playGame() bool {
 			break
 		//Game not over. Continue game loop
 		} else {
-			checkGuessMatch(wordle, guess)
+			checkGuessMatch(wordle, strings.ToUpper(guess))
 			continue
 		}
 	}
@@ -326,7 +328,7 @@ func printTurn(currTurn int, guess string, answer string) {
 	//checks if user hasn't guessed yet
 	if guess != "" {
 		//prints previous guess
-		fmt.Println("Guess: " + guess)
+		fmt.Println("Guess: " + strings.ToUpper(guess))
 
 		//Prints game results simimlar to printing out native array
 		//This allows me to color code each letter
