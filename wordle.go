@@ -2,12 +2,22 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"math/rand"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
 	"unicode"
 )
+
+// API URL - call for random word of length 5
+// https://github.com/RazorSh4rk/random-word-api.git
+var url = "https://random-word-api.herokuapp.com/word?length=5"
+
+type apiResponse struct {
+	wordle string
+}
 
 // Array of strings for available Wordle/answers
 var wordList = []string{
@@ -251,10 +261,26 @@ func printMenu() {
 // function to play full game
 // return 1 for win, 0 for lose
 func playGame() bool {
-	//randomizes anwer to current game from WordList array
-	//https://www.geeksforgeeks.org/go-language/generating-random-numbers-in-golang/
-	rand.Seed(time.Now().UnixNano())
-	wordle := wordList[rand.Intn(len(wordList))]
+	var wordle string
+	apiResponse, err := http.Get("https://random-word-api.herokuapp.com/word?length=5")
+	//if error, load local wordlist
+	if err != nil {
+		//randomizes anwer to current game from WordList array
+		//https://www.geeksforgeeks.org/go-language/generating-random-numbers-in-golang/
+		rand.Seed(time.Now().UnixNano())
+		wordle = wordList[rand.Intn(len(wordList))]
+	} else {
+		defer apiResponse.Body.Close()
+		body, err := io.ReadAll(apiResponse.Body)
+		if err != nil {
+			//randomizes anwer to current game from WordList array
+			//https://www.geeksforgeeks.org/go-language/generating-random-numbers-in-golang/
+			rand.Seed(time.Now().UnixNano())
+			wordle = wordList[rand.Intn(len(wordList))]
+		} else {
+			wordle = strings.ToUpper(string(body))
+		}
+	}
 
 	var winOrLose bool
 	//Initializes guess to empty string

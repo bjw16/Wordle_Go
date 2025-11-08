@@ -1,6 +1,7 @@
 # Wordle_Go
 
-A Go-based command line clone of the popular Wordle game, created as a project to learn Golang.
+A Go-based command line clone of the popular Wordle game, created as a project to learn Golang. 
+Based on https://www.nytimes.com/games/wordle/index.html
 
 ## Features
 
@@ -9,6 +10,7 @@ A Go-based command line clone of the popular Wordle game, created as a project t
 - Color-coded feedback for each guess:
   - **Green**: Correct letter in the correct position.
   - **Yellow**: Correct letter in the wrong position.
+
 
 ## How to Play
 
@@ -34,6 +36,10 @@ You can see an example of the game's output below.
 - `README.txt` - Original simple readme.
 - `go.mod` - Go module definition.
 - `wordle.exe` - (If present) Windows executable for the game.
+
+## API
+NOTE: If error with API, Wordle_Go switches to local wordlist
+- https://github.com/RazorSh4rk/random-word-api.git - Used for pulling randomized words as potential Wordles/answers
 
 ## License
 
