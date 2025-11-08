@@ -389,6 +389,7 @@ func printTurn(currTurn int, guess string, answer string) {
 
 		//Loops through each guess in guessArray one letter at a time
 		for _, x := range guessArray { //Retrieve each word guess in array
+			xArrayToString := strings.Join(x[:], "")
 			for i, y := range x { //prints each letter y of word x, by color
 				//prints first "[" at beginning of array
 				if i == 0 {
@@ -404,14 +405,14 @@ func printTurn(currTurn int, guess string, answer string) {
 				} else if strings.Contains(string(answer), strings.ToUpper(string(y))) { //letter in guess but incorrect position
 					//Determines if letter is in word more than once.
 					//If so, only put yellow on first time letter appears in guess
-					if strings.Count(string(guess), strings.ToUpper(string(y))) > 1 {
-						if strings.Index(string(guess), strings.ToUpper(string(y))) == i { //checks if 'i' is currently currently at the first instance position of the letter to turn yellow
+					if strings.Count(xArrayToString, strings.ToUpper(string(y))) > 1 {
+						if strings.Index(xArrayToString, strings.ToUpper(string(y))) == i { //checks if 'i' is currently currently at the first instance position of the letter to turn yellow
 							fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m")
 						} else { //mark any letter other than first instance to white
 							fmt.Print(strings.ToUpper(string(y)))
 						}
 					} else { //letter is in word only once.
-						if strings.Index(string(guess), strings.ToUpper(string(y))) == i { //mark letter yellow if only used in word once
+						if strings.Index(string(xArrayToString), strings.ToUpper(string(y))) == i { //mark letter yellow if only used in word once
 							fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m")
 						} else { //mark any letter other than first instance to white
 							fmt.Print(strings.ToUpper(string(y)))
