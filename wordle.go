@@ -279,9 +279,11 @@ func playGame() bool {
 			wordle = wordList[rand.Intn(len(wordList))]
 		} else {
 			wordle = strings.ToUpper(string(body))
+			wordle = strings.TrimPrefix(wordle, "[\"")
+			wordle = strings.TrimSuffix(wordle, "\"]")
 		}
 	}
-
+	fmt.Println(wordle)
 	var winOrLose bool
 	//Initializes guess to empty string
 	var guess string = ""
