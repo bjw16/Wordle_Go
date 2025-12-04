@@ -278,6 +278,8 @@ func playGame() bool {
 			rand.Seed(time.Now().UnixNano())
 			wordle = wordList[rand.Intn(len(wordList))]
 		} else {
+			//Trimming the API brackets
+
 			wordle = strings.ToUpper(string(body))
 			wordle = strings.TrimPrefix(wordle, "[\"")
 			wordle = strings.TrimSuffix(wordle, "\"]")
@@ -408,18 +410,20 @@ func printTurn(currTurn int, guess string, answer string) {
 					//Determines if letter is in word more than once.
 					//If so, only put yellow on first time letter appears in guess
 					if strings.Count(xArrayToString, strings.ToUpper(string(y))) > 1 {
-						if strings.Index(xArrayToString, strings.ToUpper(string(y))) == i { //checks if 'i' is currently currently at the first instance position of the letter to turn yellow
+						if strings.Index(xArrayToString, strings.ToUpper(string(y))) == i { //checks if 'i' is currently at the first instance position of the letter to turn yellow
 							fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m")
+						} else if strings.Index(xArrayToString, strings.ToUpper(string(y))) == strings.Index(answer, strings.ToUpper(string(y))) { //if first instance is a green
+							//if first instance was a match, meaning if first instance of answer is equal to first instance of guess
+							fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m") //turns letter yellow
 						} else { //mark any letter other than first instance to white
 							fmt.Print(strings.ToUpper(string(y)))
 						}
-					} else { //letter is in word only once.
-						if strings.Index(string(xArrayToString), strings.ToUpper(string(y))) == i { //mark letter yellow if only used in word once
-							fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m")
-						} else { //mark any letter other than first instance to white
-							fmt.Print(strings.ToUpper(string(y)))
-						}
+					} else if strings.Index(string(xArrayToString), strings.ToUpper(string(y))) == i { //mark letter yellow if only used in word once
+						fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m")
+					} else { //mark any letter other than first instance to white
+						fmt.Print(strings.ToUpper(string(y)))
 					}
+
 				} else { //letter is not in guess
 					//mark letter white
 					fmt.Print(strings.ToUpper(string(y)))
