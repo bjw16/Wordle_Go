@@ -285,7 +285,7 @@ func playGame() bool {
 			wordle = strings.TrimSuffix(wordle, "\"]")
 		}
 	}
-	fmt.Println(wordle)
+
 	var winOrLose bool
 	//Initializes guess to empty string
 	var guess string = ""
