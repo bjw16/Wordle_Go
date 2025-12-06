@@ -285,7 +285,7 @@ func playGame() bool {
 			wordle = strings.TrimSuffix(wordle, "\"]")
 		}
 	}
-
+	fmt.Println(wordle)
 	var winOrLose bool
 	//Initializes guess to empty string
 	var guess string = ""
@@ -407,16 +407,16 @@ func printTurn(currTurn int, guess string, answer string) {
 					fmt.Print("\033[32m" + strings.ToUpper(string(y)) + "\033[0m")
 
 				} else if strings.Contains(string(answer), strings.ToUpper(string(y))) { //letter in guess but incorrect position
-					//Determines if letter is in word more than once.
-					//If so, only put yellow on first time letter appears in guess
+					//Determines if letter is in word more than once, and is yellow more than once
 					if strings.Count(xArrayToString, strings.ToUpper(string(y))) > 1 {
-						if strings.Index(xArrayToString, strings.ToUpper(string(y))) == i { //checks if 'i' is currently at the first instance position of the letter to turn yellow
+						if strings.Index(xArrayToString, strings.ToUpper(string(y))) != strings.Index(answer, strings.ToUpper(string(y))) { //if first use of letter was yellow, than turn white
+							if i > strings.Index(xArrayToString, strings.ToUpper(string(y))) {
+								fmt.Print(strings.ToUpper(string(y)))
+							} else { ///if not first use of letter was yellow, than turn yellow
+								fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m")
+							}
+						} else { //turn yellow
 							fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m")
-						} else if strings.Index(xArrayToString, strings.ToUpper(string(y))) == strings.Index(answer, strings.ToUpper(string(y))) { //if first instance is a green
-							//if first instance was a match, meaning if first instance of answer is equal to first instance of guess
-							fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m") //turns letter yellow
-						} else { //mark any letter other than first instance to white
-							fmt.Print(strings.ToUpper(string(y)))
 						}
 					} else if strings.Index(string(xArrayToString), strings.ToUpper(string(y))) == i { //mark letter yellow if only used in word once
 						fmt.Print("\033[33m" + strings.ToUpper(string(y)) + "\033[0m")
