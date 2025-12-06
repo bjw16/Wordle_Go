@@ -219,7 +219,7 @@ func main() {
 				//i.e. not empty, and either 0 or 1
 				//0 = Don't play again. Load menu
 				//1 = Play again. Don't load menu.
-				if playAgainError != nil || playAgain >= 2 || playAgain < 0 {
+				if playAgainError != nil || playAgain >= 3 || playAgain < 0 {
 					fmt.Println("No associated input. Please try again!")
 					fmt.Println("")
 					continue
@@ -285,7 +285,7 @@ func playGame() bool {
 			wordle = strings.TrimSuffix(wordle, "\"]")
 		}
 	}
-	fmt.Println(wordle)
+
 	var winOrLose bool
 	//Initializes guess to empty string
 	var guess string = ""
