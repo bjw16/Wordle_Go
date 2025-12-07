@@ -219,7 +219,7 @@ func main() {
 				//i.e. not empty, and either 0 or 1
 				//0 = Don't play again. Load menu
 				//1 = Play again. Don't load menu.
-				if playAgainError != nil || playAgain >= 3 || playAgain < 0 {
+				if playAgainError != nil || playAgain >= 2 || playAgain < 0 {
 					fmt.Println("No associated input. Please try again!")
 					fmt.Println("")
 					continue
@@ -338,7 +338,7 @@ func playGame() bool {
 
 		//stores guess into guessArray
 		for y := 0; y < letterCount; y++ {
-			guessArray[x][y] = string(guess[y])
+			guessArray[x][y] = strings.ToUpper(string(guess[y]))
 		}
 
 		//Determines if guess matches wordle i.e. answer
@@ -359,6 +359,7 @@ func playGame() bool {
 		}
 	}
 	//Print winning wordle once game ends
+	fmt.Println("")
 	fmt.Println("Answer: " + wordle)
 
 	//return results
@@ -378,6 +379,7 @@ func playGame() bool {
 // [_ _ _ _ _]
 // [_ _ _ _ _]
 // [_ _ _ _ _]
+//
 // Q W E R T Y U I O P
 // A S D F G H J K L
 //
@@ -442,6 +444,7 @@ func printTurn(currTurn int, guess string, answer string) {
 		//prints out empty array before user has had first guess
 	} else {
 		for _, x := range guessArray {
+			fmt.Print("")
 			fmt.Println(x)
 		}
 	}
@@ -494,16 +497,37 @@ func checkGuessMatch(answer string, guess string) {
 // Print colors in ANSI escape code
 func printAvailableLetters() {
 	//sorts through letters and color code
+	fmt.Println("")
 	for _, x := range sortOrderavailableLetters {
 		if availableLetters[x] == 0 { //what to print when letter was never used in guess yet
 			//white background color
-			fmt.Print("\033[47m" + string(x) + " " + "\033[0m")
+			if x != 'P' && x != 'L' && x != 'M' {
+				fmt.Print("\033[47m" + string(x) + " " + "\033[0m")
+			} else {
+				fmt.Print("\033[47m" + string(x) + "\033[0m")
+			}
+
 		} else if availableLetters[x] == 2 { // 2 - yellow background
-			fmt.Print("\033[43m" + string(x) + " " + "\033[0m")
+			if x != 'P' && x != 'L' && x != 'M' {
+				fmt.Print("\033[43m" + string(x) + " " + "\033[0m")
+			} else {
+				fmt.Print("\033[43m" + string(x) + "\033[0m")
+			}
+
 		} else if availableLetters[x] == 1 { // 1 - green background
-			fmt.Print("\033[42m" + string(x) + " " + "\033[0m")
+			if x != 'P' && x != 'L' && x != 'M' {
+				fmt.Print("\033[42m" + string(x) + " " + "\033[0m")
+			} else {
+				fmt.Print("\033[42m" + string(x) + "\033[0m")
+			}
+
 		} else if availableLetters[x] == -1 { // -1 - white background
-			fmt.Print(string(x) + " ")
+			if x != 'P' && x != 'L' && x != 'M' {
+				fmt.Print(string(x) + " ")
+			} else {
+				fmt.Print(string(x))
+			}
+
 		}
 
 		//Prints new line at last letter for keyboard formatting
@@ -512,9 +536,10 @@ func printAvailableLetters() {
 		//here - Z X C V B N M
 		if x == 'P' {
 			fmt.Println("")
+			fmt.Print(" ")
 		} else if x == 'L' {
 			fmt.Println("")
-			fmt.Print("  ")
+			fmt.Print("   ")
 		}
 	}
 	//formatting

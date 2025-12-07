@@ -1,0 +1,22 @@
+CREATE TABLE game (
+	gameId INTPRIMARY KEY AUTOINCREMENT,
+	gameWin BOOLEAN,
+	gameAnswer VARCHAR(20) NOT NULL,
+	gameStartTimestamp DATETIME NOT NULL, 
+	gameEndTimeStamp DATETIME, 
+	gameMaxRound INT NOT NULL,
+	gameMaxGuess INT, NOT NULL,
+);
+
+CREATE TABLE attempts (
+	attemptIDINTEGER PRIMARY KEY AUTOINCREMENT
+	gameId INT,
+    localAttemptID
+	roundWin BOOLEAN,
+	attemptGuess VARCHAR(20) NOT NULL,
+	attemptTimestamp DATETIME NOT NULL, 
+
+    FORIEGN KEY (gameId) REFERENCES game(gameId)
+	CHECK (localAttemptID BETWEEN 1 AND (Select gameMaxRound From game Where attempts.gameId = game.gameId))
+    UNIQUE
+);
